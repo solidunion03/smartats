@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:18
+    container_name: smartats-db
+    environment:
+      POSTGRES_DB: smartats
+      POSTGRES_USER: smartats
+      POSTGRES_PASSWORD: dev_only_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - smartats_db_data:/var/lib/postgresql
+
+volumes:
+  smartats_db_data:
