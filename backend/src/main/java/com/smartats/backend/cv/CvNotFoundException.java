@@ -1,0 +1,11 @@
+package com.smartats.backend.cv;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class CvNotFoundException extends RuntimeException {
+    public CvNotFoundException(String ticket) {
+        super("Aucun CV trouvé pour le ticket : " + ticket);
+    }
+}
