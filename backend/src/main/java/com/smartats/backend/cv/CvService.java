@@ -14,6 +14,7 @@ public class CvService {
 
     private final CvRepository cvRepository;
     private final Path storageDir;
+    private static final long MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 Mo
 
     public CvService(CvRepository cvRepository,
                      @Value("${smartats.storage.dir}") String storageDir) {
@@ -22,6 +23,7 @@ public class CvService {
     }
 
     public CvUploadResponse receive(MultipartFile file) {
+        validate(file); 
         try {
             UUID id = UUID.randomUUID();
             String ticket = id.toString();
@@ -49,5 +51,18 @@ public class CvService {
         CvDocument doc = cvRepository.findByTicket(ticket)
                 .orElseThrow(() -> new CvNotFoundException(ticket));
         return new CvUploadResponse(doc.getTicket(), doc.getFilename(), doc.getSizeBytes());
+    }
+    private void validate(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new CvInvalidException("Le fichier est vide.");
+        }
+        if (file.getSize() > MAX_SIZE_BYTES) {
+            throw new CvInvalidException("Le fichier dépasse la taille maximale de 5 Mo.");
+        }
+        String name = file.getOriginalFilename();
+        if (name == null
+                || !(name.toLowerCase().endsWith(".pdf") || name.toLowerCase().endsWith(".docx"))) {
+            throw new CvInvalidException("Seuls les fichiers PDF ou DOCX sont acceptés.");
+        }
     }
 }
