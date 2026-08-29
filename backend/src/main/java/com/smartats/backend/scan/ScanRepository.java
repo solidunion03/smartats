@@ -1,0 +1,9 @@
+package com.smartats.backend.scan;
+
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ScanRepository extends JpaRepository<Scan, UUID> {
+    Optional<Scan> findByTicket(String ticket);
+}
