@@ -23,7 +23,7 @@ public class CvService {
     }
 
     public CvUploadResponse receive(MultipartFile file) {
-        validate(file); 
+        validate(file);
         try {
             UUID id = UUID.randomUUID();
             String ticket = id.toString();
@@ -47,11 +47,13 @@ public class CvService {
             throw new RuntimeException("Échec du stockage du CV", e);
         }
     }
+
     public CvUploadResponse getByTicket(String ticket) {
         CvDocument doc = cvRepository.findByTicket(ticket)
                 .orElseThrow(() -> new CvNotFoundException(ticket));
         return new CvUploadResponse(doc.getTicket(), doc.getFilename(), doc.getSizeBytes());
     }
+
     private void validate(MultipartFile file) {
         if (file.isEmpty()) {
             throw new CvInvalidException("Le fichier est vide.");
@@ -64,5 +66,32 @@ public class CvService {
                 || !(name.toLowerCase().endsWith(".pdf") || name.toLowerCase().endsWith(".docx"))) {
             throw new CvInvalidException("Seuls les fichiers PDF ou DOCX sont acceptés.");
         }
+        try {
+            if (!hasValidSignature(file)) {
+                throw new CvInvalidException("Le contenu du fichier n'est pas un PDF ou un DOCX valide.");
+            }
+        } catch (IOException e) {
+            throw new CvInvalidException("Impossible de lire le contenu du fichier.");
+        }
+    }
+
+    private boolean hasValidSignature(MultipartFile file) throws IOException {
+        byte[] header = new byte[4];
+        try (var in = file.getInputStream()) {
+            int read = in.read(header);   // lit jusqu'à 4 octets, au tout début
+            if (read < 4) {
+                return false;             // trop court pour être un vrai PDF/DOCX
+            }
+        }
+
+        // PDF : commence par les octets %PDF
+        boolean isPdf = header[0] == '%' && header[1] == 'P'
+                     && header[2] == 'D' && header[3] == 'F';
+
+        // DOCX (archive ZIP) : commence par P K puis 0x03 0x04
+        boolean isDocx = header[0] == 'P' && header[1] == 'K'
+                      && header[2] == 0x03 && header[3] == 0x04;
+
+        return isPdf || isDocx;
     }
 }
