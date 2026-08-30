@@ -1,0 +1,1 @@
+ALTER TABLE scan ADD COLUMN score INTEGER;

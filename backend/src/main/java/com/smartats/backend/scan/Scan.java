@@ -27,15 +27,19 @@ public class Scan {
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
+    @Column(name = "score")
+    private Integer score;
+
     protected Scan() {
     }
 
-    public Scan(UUID id, String ticket, UUID cvId, UUID jobPostId, OffsetDateTime createdAt) {
+    public Scan(UUID id, String ticket, UUID cvId, UUID jobPostId, OffsetDateTime createdAt, Integer score) {
         this.id = id;
         this.ticket = ticket;
         this.cvId = cvId;
         this.jobPostId = jobPostId;
         this.createdAt = createdAt;
+        this.score = score;
     }
 
     public UUID getId() { return id; }
@@ -43,4 +47,5 @@ public class Scan {
     public UUID getCvId() { return cvId; }
     public UUID getJobPostId() { return jobPostId; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
+    public Integer getScore() { return score; }
 }
