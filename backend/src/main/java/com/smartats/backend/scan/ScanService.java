@@ -45,7 +45,7 @@ public class ScanService {
 
         // NOUVEAU : demander un score au service Python
         // (texte CV provisoire — le parsing du PDF viendra après)
-        String cvText = "cv text placeholder";
+        String cvText = cv.getExtractedText();
         String jobText = jobPost.getRawText();
         MlScoreResponse mlResponse = mlClient.score(cvText, jobText);
 

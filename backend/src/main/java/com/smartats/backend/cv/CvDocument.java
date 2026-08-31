@@ -29,16 +29,20 @@ public class CvDocument {
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
+    @Column(name = "extracted_text")
+    private String extractedText;
+
     protected CvDocument() {
     }
 
-    public CvDocument(UUID id, String ticket, String filename, long sizeBytes, String storagePath, OffsetDateTime createdAt) {
+    public CvDocument(UUID id, String ticket, String filename, long sizeBytes, String storagePath, OffsetDateTime createdAt, String extractedText) {
         this.id = id;
         this.ticket = ticket;
         this.filename = filename;
         this.sizeBytes = sizeBytes;
         this.storagePath = storagePath;
         this.createdAt = createdAt;
+        this.extractedText = extractedText;
     }
 
     public UUID getId() { return id; }
@@ -47,4 +51,5 @@ public class CvDocument {
     public long getSizeBytes() { return sizeBytes; }
     public String getStoragePath() { return storagePath; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
+    public String getExtractedText() { return extractedText; }
 }

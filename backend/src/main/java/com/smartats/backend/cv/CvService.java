@@ -22,7 +22,7 @@ public class CvService {
         this.storageDir = Path.of(storageDir);
     }
 
-    public CvUploadResponse receive(MultipartFile file) {
+        public CvUploadResponse receive(MultipartFile file) {
         validate(file);
         try {
             UUID id = UUID.randomUUID();
@@ -32,19 +32,28 @@ public class CvService {
             Path target = storageDir.resolve(ticket + "-" + file.getOriginalFilename());
             file.transferTo(target);
 
+            String extractedText = extractText(target);   
+
             CvDocument doc = new CvDocument(
                     id,
                     ticket,
                     file.getOriginalFilename(),
                     file.getSize(),
                     target.toString(),
-                    OffsetDateTime.now()
+                    OffsetDateTime.now(),
+                    extractedText                          
             );
             cvRepository.save(doc);
 
             return new CvUploadResponse(ticket, file.getOriginalFilename(), file.getSize());
         } catch (IOException e) {
             throw new RuntimeException("Échec du stockage du CV", e);
+        }
+    }
+    private String extractText(Path pdfPath) throws IOException {
+        try (var document = org.apache.pdfbox.Loader.loadPDF(pdfPath.toFile())) {
+            var stripper = new org.apache.pdfbox.text.PDFTextStripper();
+            return stripper.getText(document);
         }
     }
 

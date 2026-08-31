@@ -1,0 +1,1 @@
+ALTER TABLE cv_document ADD COLUMN extracted_text TEXT;
