@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class JobPostController {
+public class JobPostController { 
 
     private final JobPostService jobPostService;
 
