@@ -34,4 +34,28 @@ public class JwtService {
                 .signWith(key)               // le TAMPON : signé avec la clé secrète
                 .compact();                  // produit la chaîne finale xxx.yyy.zzz
     }
+    public String extractEmail(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    public String extractRole(String token) {
+        return parseClaims(token).get("role", String.class);
+    }
+
+    public boolean isValid(String token) {
+        try {
+            parseClaims(token);   // si le parsing réussit, signature OK et non expiré
+            return true;
+        } catch (Exception e) {
+            return false;         // signature invalide, expiré, malformé...
+        }
+    }
+
+    private io.jsonwebtoken.Claims parseClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)        // vérifie la signature avec NOTRE clé secrète
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
 }
