@@ -51,4 +51,9 @@ public class AuthService {
         String token = jwtService.generateToken(user.getEmail(), user.getRole());
         return new LoginResponse(token);
     }
+    public java.util.List<String> listAllEmails() {
+        return appUserRepository.findAll().stream()
+                .map(AppUser::getEmail)
+                .toList();
+    }
 }
