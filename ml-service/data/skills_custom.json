@@ -1,0 +1,16 @@
+{
+  "python": ["python", "py", "python3"],
+  "java": ["java", "jdk", "j2ee"],
+  "spring": ["spring", "spring boot", "springboot", "spring framework"],
+  "javascript": ["javascript", "js", "ecmascript"],
+  "typescript": ["typescript", "ts"],
+  "react": ["react", "reactjs", "react.js"],
+  "docker": ["docker", "conteneurisation", "containerization"],
+  "kubernetes": ["kubernetes", "k8s"],
+  "postgresql": ["postgresql", "postgres", "psql"],
+  "sql": ["sql", "requetes sql"],
+  "git": ["git", "github", "gitlab", "controle de version"],
+  "fastapi": ["fastapi", "fast api"],
+  "machine learning": ["machine learning", "ml", "apprentissage automatique"],
+  "nlp": ["nlp", "traitement du langage naturel", "natural language processing"]
+}

@@ -202,3 +202,23 @@ docker exec -it smartats-db psql -U smartats -d smartats -c "\dt"
   et **doivent être remplacés par des variables d'environnement en production**.
 - Les mots de passe ne sont **jamais** stockés en clair (BCrypt, salé, à coût élevé).
 - Les JWT sont signés (HS512) : lisibles mais infalsifiables sans la clé secrète.
+
+## Taxonomie des compétences (service ML)
+
+Le moteur reconnaît environ 14 000 compétences issues d'ESCO v1.2.1 (référentiel européen),
+en français et en anglais, complétées par `ml-service/data/skills_custom.json`
+(outils tech, abréviations). Le fichier custom est prioritaire sur ESCO.
+
+Le service charge `ml-service/data/taxonomy.json` (généré et versionné). Pour le régénérer :
+
+1. Télécharger ESCO v1.2.1, format CSV, en français et en anglais :
+   https://esco.ec.europa.eu/en/use-esco/download
+2. Copier `skills_fr.csv` et `skills_en.csv` dans `ml-service/data/` (non versionnés).
+3. Lancer :
+```bash
+   cd ml-service && source .venv/bin/activate
+   python3 scripts/build_taxonomy.py
+```
+4. Redémarrer le service ML.
+
+Après toute modification de `skills_custom.json`, relancer l'étape 3.

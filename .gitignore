@@ -30,3 +30,6 @@ venv/
 *.iml
 .DS_Store
 *.log
+
+echo "ml-service/data/*.csv" >> ~/projects/smartats/.gitignoreml-service/data/*.csv
+ml-service/data/*.csv

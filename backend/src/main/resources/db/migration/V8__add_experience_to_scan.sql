@@ -1,0 +1,3 @@
+ALTER TABLE scan ADD COLUMN experience_score INTEGER;
+ALTER TABLE scan ADD COLUMN required_years   INTEGER;
+ALTER TABLE scan ADD COLUMN candidate_years  DOUBLE PRECISION;
